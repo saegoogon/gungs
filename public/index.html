@@ -10,9 +10,11 @@
     <div class="aurora aurora-left"></div>
     <div class="aurora aurora-right"></div>
     <div class="grid-noise"></div>
+    <div id="impact-layer" class="impact-layer" aria-hidden="true"></div>
 
     <div id="auth-modal" class="overlay visible">
       <section class="auth-card">
+        <img class="auth-logo" src="/assets/logo-mark.svg" alt="Orefall logo" />
         <p class="eyebrow">Orefall Online</p>
         <h1>심연 광산에 접속</h1>
         <p class="auth-copy">
@@ -38,9 +40,12 @@
 
     <main class="app-shell">
       <header class="topbar panel">
-        <div>
+        <div class="brand-lockup">
+          <img class="brand-logo" src="/assets/logo-mark.svg" alt="Orefall logo" />
+          <div>
           <p class="eyebrow">Server-Backed Idle RPG</p>
           <h2>Orefall Idle Online</h2>
+          </div>
         </div>
         <div class="topbar-actions">
           <div class="chip">
@@ -51,6 +56,7 @@
             <span>프리미엄 젬</span>
             <strong id="premium-gems">0</strong>
           </div>
+          <button id="sound-button" class="ghost-button small-button">사운드 ON</button>
           <button id="save-button" class="ghost-button small-button">서버 저장</button>
         </div>
       </header>
@@ -71,18 +77,9 @@
           </div>
 
           <div class="hero-stage">
-            <div class="ore-rig">
-              <div class="ore-rig__mast"></div>
-              <div class="ore-rig__arm"></div>
-              <div class="ore-rig__laser"></div>
-            </div>
-            <div class="ore-pile pile-a"></div>
-            <div class="ore-pile pile-b"></div>
-            <div class="boss-silhouette">
-              <div class="boss-eye eye-left"></div>
-              <div class="boss-eye eye-right"></div>
-              <div class="boss-core"></div>
-            </div>
+            <img class="stage-art stage-rig" src="/assets/rig-drill.svg" alt="Drill rig" />
+            <img class="stage-art stage-ore" src="/assets/ore-cluster.svg" alt="Ore cluster" />
+            <img class="stage-art stage-boss" src="/assets/boss-wyrm.svg" alt="Boss monster" />
           </div>
         </article>
 
@@ -131,11 +128,7 @@
             <span id="boss-floor-badge" class="badge">10층</span>
           </div>
           <div class="boss-card">
-            <div class="boss-avatar">
-              <div class="boss-avatar__horn left"></div>
-              <div class="boss-avatar__horn right"></div>
-              <div class="boss-avatar__face"></div>
-            </div>
+            <img class="boss-illustration" src="/assets/boss-wyrm.svg" alt="Boss illustration" />
             <div class="boss-info">
               <p id="boss-name" class="boss-name">Crag Maw</p>
               <div class="health-track">
@@ -206,6 +199,12 @@
         </article>
       </section>
     </main>
+
+    <div class="mobile-action-bar">
+      <button id="mine-button-mobile" class="primary-button">채굴</button>
+      <button id="fight-button-mobile" class="secondary-button">전투</button>
+      <button id="boss-button-mobile" class="accent-button">보스</button>
+    </div>
 
     <script src="https://js.tosspayments.com/v2/standard"></script>
     <script src="/app.js"></script>

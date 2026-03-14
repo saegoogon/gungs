@@ -50,6 +50,8 @@ const state = {
   profile: null,
   paymentProvider: "toss",
   paymentEnabled: false,
+  soundEnabled: true,
+  audioContext: null,
 };
 
 const elements = {
@@ -60,10 +62,14 @@ const elements = {
   loginButton: document.querySelector("#login-button"),
   usernameLabel: document.querySelector("#username-label"),
   premiumGems: document.querySelector("#premium-gems"),
+  soundButton: document.querySelector("#sound-button"),
   saveButton: document.querySelector("#save-button"),
   mineButton: document.querySelector("#mine-button"),
+  mineButtonMobile: document.querySelector("#mine-button-mobile"),
   fightButton: document.querySelector("#fight-button"),
+  fightButtonMobile: document.querySelector("#fight-button-mobile"),
   bossButton: document.querySelector("#boss-button"),
+  bossButtonMobile: document.querySelector("#boss-button-mobile"),
   heroTitle: document.querySelector("#hero-title"),
   heroCopy: document.querySelector("#hero-copy"),
   syncBadge: document.querySelector("#sync-badge"),
@@ -88,6 +94,7 @@ const elements = {
   storeList: document.querySelector("#store-list"),
   skinList: document.querySelector("#skin-list"),
   logList: document.querySelector("#log-list"),
+  impactLayer: document.querySelector("#impact-layer"),
 };
 
 function number(value) {
@@ -105,6 +112,90 @@ function pushLog(text) {
   }
   gameState.logs.unshift({ id: `${Date.now()}-${Math.random()}`, text: String(text).slice(0, 180) });
   gameState.logs = gameState.logs.slice(0, 24);
+}
+
+function ensureAudioContext() {
+  if (!state.soundEnabled) {
+    return null;
+  }
+  if (!state.audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      return null;
+    }
+    state.audioContext = new AudioContextClass();
+  }
+  if (state.audioContext.state === "suspended") {
+    state.audioContext.resume();
+  }
+  return state.audioContext;
+}
+
+function playSound(type) {
+  const ctx = ensureAudioContext();
+  if (!ctx) {
+    return;
+  }
+  const now = ctx.currentTime;
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  oscillator.connect(gain);
+  gain.connect(ctx.destination);
+
+  if (type === "mine") {
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(440, now);
+    oscillator.frequency.exponentialRampToValueAtTime(320, now + 0.08);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+  } else if (type === "boss") {
+    oscillator.type = "sawtooth";
+    oscillator.frequency.setValueAtTime(180, now);
+    oscillator.frequency.exponentialRampToValueAtTime(80, now + 0.18);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.12, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+  } else {
+    oscillator.type = "square";
+    oscillator.frequency.setValueAtTime(280, now);
+    oscillator.frequency.exponentialRampToValueAtTime(180, now + 0.12);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.09, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+  }
+
+  oscillator.start(now);
+  oscillator.stop(now + 0.24);
+}
+
+function spawnFeedback(text, x, y, variant) {
+  if (!elements.impactLayer) {
+    return;
+  }
+  const node = document.createElement("div");
+  node.className = `floating-feedback ${variant}`;
+  node.textContent = text;
+  node.style.left = `${x}px`;
+  node.style.top = `${y}px`;
+  elements.impactLayer.appendChild(node);
+  setTimeout(() => node.remove(), 900);
+}
+
+function buttonCenter(button) {
+  const rect = button.getBoundingClientRect();
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2,
+  };
+}
+
+function shake(target) {
+  target.classList.remove("screen-shake");
+  void target.offsetWidth;
+  target.classList.add("screen-shake");
+  setTimeout(() => target.classList.remove("screen-shake"), 260);
 }
 
 function calcPower(gameState) {
@@ -191,6 +282,12 @@ function attackBoss(auto = false) {
   elements.combatText.textContent = auto
     ? `자동 포탑이 ${number(damage)} 피해를 입혔다.`
     : `${number(damage)} 피해를 입혔다.`;
+  if (!auto) {
+    const point = buttonCenter(elements.fightButton);
+    spawnFeedback(`-${number(damage)}`, point.x, point.y, "hit");
+    shake(document.querySelector(".boss-panel"));
+    playSound("boss");
+  }
   advanceBossState(gameState);
 }
 
@@ -210,6 +307,9 @@ function mine() {
   }
 
   updateQuestProgress(gameState);
+  const point = buttonCenter(elements.mineButton);
+  spawnFeedback(`+${number(gain)} 광석`, point.x, point.y, "mine");
+  playSound("mine");
   render();
 }
 
@@ -336,6 +436,7 @@ function render() {
   elements.premiumGems.textContent = number(gameState.resources.premiumGems);
   elements.heroTitle.textContent = `심연 ${gameState.progression.depth}층`;
   elements.heroCopy.textContent = `${gameState.cosmetics.activeSkin} 스킨 장착 중. 서버 저장과 랭킹 경쟁이 실시간으로 이어지고 있다.`;
+  elements.soundButton.textContent = state.soundEnabled ? "사운드 ON" : "사운드 OFF";
   elements.offlineLabel.textContent = new Date(gameState.lastUpdatedAt).toLocaleTimeString("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
@@ -432,6 +533,14 @@ function setSync(title, body, isError = false) {
   elements.syncText.textContent = body;
 }
 
+function toggleSound() {
+  state.soundEnabled = !state.soundEnabled;
+  if (!state.soundEnabled && state.audioContext) {
+    state.audioContext.suspend();
+  }
+  render();
+}
+
 async function syncToServer() {
   if (!state.profile) {
     return;
@@ -504,13 +613,31 @@ async function authenticate(mode) {
 
 elements.registerButton.addEventListener("click", () => authenticate("register"));
 elements.loginButton.addEventListener("click", () => authenticate("login"));
+elements.soundButton.addEventListener("click", () => toggleSound());
 elements.saveButton.addEventListener("click", () => syncToServer());
 elements.mineButton.addEventListener("click", () => mine());
+elements.mineButtonMobile.addEventListener("click", () => mine());
 elements.fightButton.addEventListener("click", () => {
   attackBoss(false);
   render();
 });
+elements.fightButtonMobile.addEventListener("click", () => {
+  attackBoss(false);
+  render();
+});
 elements.bossButton.addEventListener("click", () => {
+  const gameState = getGameState();
+  if (!gameState) {
+    return;
+  }
+  if (gameState.progression.depth < gameState.progression.bossFloor) {
+    elements.combatText.textContent = `${gameState.progression.bossFloor}층까지 더 내려가야 보스를 만날 수 있다.`;
+    return;
+  }
+  attackBoss(false);
+  render();
+});
+elements.bossButtonMobile.addEventListener("click", () => {
   const gameState = getGameState();
   if (!gameState) {
     return;
