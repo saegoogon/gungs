@@ -286,6 +286,31 @@ h1 {
   padding: 18px;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(22, 28, 36, 0.94), rgba(10, 13, 18, 0.98));
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.weapon-card[data-rarity="common"] {
+  border-color: rgba(215, 223, 235, 0.15);
+}
+
+.weapon-card[data-rarity="rare"] {
+  border-color: rgba(118, 240, 213, 0.42);
+  box-shadow: 0 0 0 1px rgba(118, 240, 213, 0.06), 0 22px 34px rgba(0, 0, 0, 0.32);
+}
+
+.weapon-card[data-rarity="epic"] {
+  border-color: rgba(164, 125, 255, 0.46);
+  box-shadow: 0 0 0 1px rgba(164, 125, 255, 0.08), 0 22px 34px rgba(0, 0, 0, 0.34);
+}
+
+.weapon-card[data-rarity="legend"] {
+  border-color: rgba(255, 110, 78, 0.5);
+  box-shadow: 0 0 0 1px rgba(255, 110, 78, 0.08), 0 24px 42px rgba(0, 0, 0, 0.36);
+}
+
+.weapon-card[data-rarity="relic"] {
+  border-color: rgba(244, 191, 79, 0.55);
+  box-shadow: 0 0 0 1px rgba(244, 191, 79, 0.1), 0 26px 48px rgba(0, 0, 0, 0.4);
 }
 
 .weapon-card__glow {
@@ -298,6 +323,21 @@ h1 {
   background: radial-gradient(circle, rgba(255, 110, 78, 0.32), transparent 68%);
 }
 
+.weapon-card__tier {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.05);
+  color: #dfe6ef;
+}
+
 .weapon-card__name {
   position: relative;
   z-index: 1;
@@ -305,6 +345,7 @@ h1 {
   font-size: 0.9rem;
   letter-spacing: 0.14em;
   color: #ffe7d0;
+  margin-top: 10px;
 }
 
 .weapon-card__frame {
@@ -361,6 +402,33 @@ h1 {
   gap: 12px;
   margin-top: 14px;
   color: #ffcfb3;
+}
+
+.weapon-option-list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.weapon-option {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: #cfe9df;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.weapon-card.success {
+  animation: forge-success 340ms ease;
+}
+
+.weapon-card.fail {
+  animation: forge-fail 360ms ease;
 }
 
 .terminal-panel {
@@ -689,6 +757,41 @@ button:disabled {
   }
   75% {
     transform: translate3d(-4px, 0, 0);
+  }
+}
+
+@keyframes forge-success {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 110, 78, 0);
+  }
+  45% {
+    transform: scale(1.04);
+    box-shadow: 0 0 40px rgba(244, 191, 79, 0.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes forge-fail {
+  0% {
+    transform: translateX(0);
+    filter: saturate(1);
+  }
+  25% {
+    transform: translateX(-7px);
+    filter: saturate(0.8);
+  }
+  50% {
+    transform: translateX(7px);
+    filter: saturate(1.2);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 
