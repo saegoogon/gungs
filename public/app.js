@@ -453,9 +453,11 @@ async function fetchStore() {
       payload.items.map((item) =>
         buildCard({
           title: item.name,
-          description: state.paymentEnabled ? item.description : `${item.description} 현재는 결제 키가 없어 비활성화됨.`,
+          description: state.paymentEnabled
+            ? item.description
+            : `${item.description} 현재 프리미엄 결제는 준비중이며, 사업자 등록 이후 활성화될 예정입니다.`,
           meta: `${number(item.price)} ${item.currency}`,
-          buttonLabel: "구매",
+          buttonLabel: state.paymentEnabled ? "구매" : "준비중",
           disabled: !state.profile || !state.paymentEnabled,
           className: "secondary-button small-button",
           onClick: () => openCheckout(item),
