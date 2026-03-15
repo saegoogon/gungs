@@ -1,119 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gungs | 3D Duel Shooter</title>
-    <meta name="description" content="Real-time online 1v1 shooter rendered as a 3D neon arena." />
+    <title>WiFi Spot | Smart Home Network Guide</title>
+    <meta
+      name="description"
+      content="집 안 와이파이 신호를 쉽게 이해하고, 공유기 위치와 사용 환경에 맞는 추천을 확인하는 스마트 와이파이 안내 사이트."
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="atmosphere"></div>
+    <div class="page-glow page-glow-left"></div>
+    <div class="page-glow page-glow-right"></div>
 
-    <div id="entry-overlay" class="overlay visible">
-      <section class="entry-card">
-        <p class="eyebrow">ENGINE MODE</p>
-        <h1 id="hero-app-name">gungs</h1>
-        <p class="entry-copy">
-          Real-time 1v1 duel shooter with a true 3D arena view. Move with `WASD`, aim with the mouse, and land 5 kills first.
-        </p>
-        <div class="entry-grid">
-          <div><strong>Movement</strong><span>W A S D</span></div>
-          <div><strong>Aim</strong><span>Mouse</span></div>
-          <div><strong>Fire</strong><span>Hold left click</span></div>
-        </div>
-        <div class="entry-actions">
-          <input id="nickname-input" class="text-input" maxlength="20" placeholder="Pilot name" />
-          <button id="play-button" class="primary-button">Enter Arena</button>
-        </div>
-        <p id="entry-status" class="muted-text">Pick a name and jump into matchmaking.</p>
-      </section>
-    </div>
-
-    <main class="app-shell">
-      <header class="topbar shell-panel">
-        <div>
-          <p class="eyebrow">3D REALTIME PVP</p>
-          <h2 id="app-name">gungs</h2>
-        </div>
-        <div class="topbar-meta">
-          <div class="meta-chip">
-            <span>Network</span>
-            <strong id="connection-status">Offline</strong>
+    <main class="page-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">SMART WIFI EXPERIENCE</p>
+          <h1 id="app-name">WiFi Spot</h1>
+          <p class="hero-text">
+            우리 집 와이파이가 왜 느린지, 어디에 공유기를 둬야 하는지, 어떤 환경에서 신호가 약해지는지 한눈에 확인할 수 있는 와이파이 안내 사이트입니다.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#signal-lab">신호 진단 시작</a>
+            <a class="secondary-link" href="#placement-guide">설치 팁 보기</a>
           </div>
-          <div class="meta-chip">
-            <span>Pilot</span>
-            <strong id="player-name">Guest</strong>
+          <div class="hero-stats">
+            <div class="stat-card">
+              <span>추천 위치</span>
+              <strong>집 중앙</strong>
+            </div>
+            <div class="stat-card">
+              <span>최적 대역</span>
+              <strong>5GHz + 2.4GHz</strong>
+            </div>
+            <div class="stat-card">
+              <span>체감 품질</span>
+              <strong id="headline-quality">안정적</strong>
+            </div>
           </div>
         </div>
-      </header>
 
-      <section class="experience-grid">
-        <section class="viewer shell-panel">
-          <div class="viewer-top">
+        <div class="hero-panel panel">
+          <div class="panel-header">
             <div>
-              <p class="eyebrow">LIVE MATCH</p>
-              <h3>Neon Duel Chamber</h3>
+              <p class="eyebrow">LIVE OVERVIEW</p>
+              <h2>현재 와이파이 상태</h2>
             </div>
-            <div class="viewer-badges">
-              <span id="round-label" class="badge">Queue</span>
-              <span id="winner-label" class="badge badge-gold">No Winner</span>
+            <span class="badge">Home Dashboard</span>
+          </div>
+
+          <div class="signal-meter">
+            <div class="meter-head">
+              <span>신호 강도</span>
+              <strong id="signal-score">82점</strong>
+            </div>
+            <div class="signal-bars" aria-hidden="true">
+              <span class="bar active"></span>
+              <span class="bar active"></span>
+              <span class="bar active"></span>
+              <span class="bar active"></span>
+              <span class="bar"></span>
+            </div>
+            <p id="signal-summary" class="muted">
+              웹서핑과 영상 시청에 충분한 상태예요.
+            </p>
+          </div>
+
+          <div class="mini-grid">
+            <article class="mini-card">
+              <span>다운로드 체감</span>
+              <strong id="speed-summary">빠름</strong>
+            </article>
+            <article class="mini-card">
+              <span>지연 가능성</span>
+              <strong id="latency-summary">낮음</strong>
+            </article>
+            <article class="mini-card">
+              <span>추천 장비</span>
+              <strong id="router-summary">듀얼 밴드</strong>
+            </article>
+            <article class="mini-card">
+              <span>간섭 수준</span>
+              <strong id="interference-summary">보통</strong>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="signal-lab" class="content-grid">
+        <section class="panel lab-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">SIGNAL LAB</p>
+              <h2>우리 집 와이파이 진단</h2>
+            </div>
+            <span class="badge">Interactive</span>
+          </div>
+
+          <div class="control-group">
+            <label for="room-size">집 크기</label>
+            <input id="room-size" type="range" min="20" max="120" value="58" />
+            <div class="range-meta">
+              <span>작은 공간</span>
+              <strong><span id="room-size-value">58</span>m²</strong>
+              <span>넓은 공간</span>
             </div>
           </div>
 
-          <div class="render-wrap">
-            <div id="render-stage" class="render-stage"></div>
-            <div class="hud-layer">
-              <div class="floating-card left-card">
-                <span>Status</span>
-                <strong id="match-message">Searching for opponent...</strong>
-              </div>
-              <div class="floating-card right-card">
-                <span>Socket</span>
-                <strong id="ping-label">WS</strong>
-              </div>
-              <div class="floating-card bottom-left-card">
-                <span>Weapon</span>
-                <strong id="ammo-label">10 / 10</strong>
-              </div>
-              <div class="floating-card bottom-right-card">
-                <span>Mobility</span>
-                <strong id="dash-label">Dash Ready</strong>
-              </div>
+          <div class="control-group">
+            <label for="device-count">연결 기기 수</label>
+            <input id="device-count" type="range" min="1" max="30" value="11" />
+            <div class="range-meta">
+              <span>적음</span>
+              <strong><span id="device-count-value">11</span>대</strong>
+              <span>많음</span>
             </div>
-            <div id="damage-flash" class="damage-flash"></div>
-            <div id="arena-overlay" class="arena-overlay">Searching for opponent...</div>
+          </div>
+
+          <div class="control-group">
+            <label for="wall-count">막는 벽 수</label>
+            <input id="wall-count" type="range" min="0" max="6" value="2" />
+            <div class="range-meta">
+              <span>없음</span>
+              <strong><span id="wall-count-value">2</span>개</strong>
+              <span>많음</span>
+            </div>
+          </div>
+
+          <div class="chip-row">
+            <button class="choice-chip active" data-band="dual" type="button">듀얼 밴드</button>
+            <button class="choice-chip" data-band="5ghz" type="button">5GHz 우선</button>
+            <button class="choice-chip" data-band="24ghz" type="button">2.4GHz 우선</button>
+          </div>
+
+          <div class="diagnosis-card">
+            <p class="diagnosis-label">추천 한마디</p>
+            <h3 id="diagnosis-title">지금 환경이면 거실 중앙 배치가 가장 좋아요.</h3>
+            <p id="diagnosis-copy" class="muted">
+              벽이 적당히 있고 기기가 10대 이상이라면, 5GHz만 쓰기보다 듀얼 밴드 공유기가 훨씬 안정적입니다.
+            </p>
           </div>
         </section>
 
-        <aside class="sidebar">
-          <section class="shell-panel score-panel">
-            <div class="panel-head">
-              <h3>Scoreboard</h3>
-              <span class="badge">First To 5</span>
+        <aside class="stack-column">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">ROOM MAP</p>
+                <h2>추천 배치</h2>
+              </div>
+              <span class="badge">Placement</span>
             </div>
-            <div id="scoreboard" class="scoreboard"></div>
+
+            <div class="room-map">
+              <div class="room-node room-router" id="router-node">
+                <span>공유기</span>
+              </div>
+              <div class="room-node room-device room-tv">
+                <span>TV</span>
+              </div>
+              <div class="room-node room-device room-phone">
+                <span>Phone</span>
+              </div>
+              <div class="room-node room-device room-laptop">
+                <span>Laptop</span>
+              </div>
+              <div class="wifi-ring ring-a"></div>
+              <div class="wifi-ring ring-b"></div>
+              <div class="wifi-ring ring-c"></div>
+            </div>
           </section>
 
-          <section class="shell-panel log-panel">
-            <div class="panel-head">
-              <h3>Combat Feed</h3>
-              <span class="badge">Live</span>
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">BEST PRACTICE</p>
+                <h2>꼭 기억할 팁</h2>
+              </div>
+              <span class="badge">Top 4</span>
             </div>
-            <div id="event-log" class="event-log"></div>
-          </section>
 
-          <section class="shell-panel ad-panel">
-            <div class="panel-head">
-              <h3>Ad Slot</h3>
-              <span class="badge badge-gold">Monetize</span>
-            </div>
-            <div id="side-ad-slot" class="ad-slot" data-ad-slot="2000000001">
-              AdSense client goes here when `ADSENSE_CLIENT` is configured.
+            <div class="tips-list">
+              <article class="tip-item">
+                <strong>1. 벽장 안은 피하기</strong>
+                <p>문 닫힌 수납장이나 바닥 가까운 곳은 신호 손실이 큽니다.</p>
+              </article>
+              <article class="tip-item">
+                <strong>2. 전자레인지와 거리두기</strong>
+                <p>2.4GHz 간섭이 생길 수 있어 주방 근처는 특히 주의가 필요합니다.</p>
+              </article>
+              <article class="tip-item">
+                <strong>3. 온라인 게임은 5GHz 우선</strong>
+                <p>가까운 거리에서는 5GHz가 더 빠르고 지연이 적은 편입니다.</p>
+              </article>
+              <article class="tip-item">
+                <strong>4. 넓은 집은 메시 고려</strong>
+                <p>면적이 넓거나 벽이 많으면 증폭기보다 메시 구성이 더 안정적일 수 있습니다.</p>
+              </article>
             </div>
           </section>
         </aside>
+      </section>
+
+      <section id="placement-guide" class="panel footer-panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">WIFI CHECKLIST</p>
+            <h2>이런 사람에게 잘 맞아요</h2>
+          </div>
+          <span class="badge">Guide</span>
+        </div>
+
+        <div class="check-grid">
+          <article class="check-card">
+            <strong>집 와이파이가 자주 끊겨요</strong>
+            <p>방마다 신호 세기를 비교하고 공유기 위치를 다시 잡아볼 수 있어요.</p>
+          </article>
+          <article class="check-card">
+            <strong>게임이나 영상이 자꾸 느려져요</strong>
+            <p>기기 수와 벽 개수를 기준으로 지연 가능성과 적합한 대역을 보여줘요.</p>
+          </article>
+          <article class="check-card">
+            <strong>새 공유기를 사기 전에 확인하고 싶어요</strong>
+            <p>듀얼 밴드, 5GHz, 2.4GHz 중 어떤 설정이 맞는지 감을 잡을 수 있어요.</p>
+          </article>
+        </div>
       </section>
     </main>
 

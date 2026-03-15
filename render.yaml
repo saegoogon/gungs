@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: gungs
+    name: wifi-spot
     runtime: node
     plan: free
     buildCommand: npm install --omit=dev
@@ -11,6 +11,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: APP_NAME
-        value: gungs
+        value: WiFi Spot
       - key: ADSENSE_CLIENT
         sync: false
